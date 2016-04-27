@@ -1,0 +1,44 @@
+clear all
+
+h = .1;
+x = 0:h:10;
+N = length(x); %total number of nodes
+n = N-2;
+
+D = sparse(1:n,1:n,-2*ones(1,n),n,n); % sets diag of sparse
+E = sparse(2:n,1:n-1,ones(1,n-1),n,n);
+S = E+D+E';
+A = full(S); % Makes sparse dense
+A = (1/h^2).*A;
+
+
+tic   %sets timer
+ 
+for j = 1:N  %Sets force
+
+    F(j) = 2*exp(-(x(j)-5)^2)*(-2*(x(j)-5)^2+1);
+    
+end
+
+
+
+DET = det(A) % Calculates the determinant
+
+
+F = F(2:N-1)';
+
+U = A\-F; %matrix solve
+
+toc %end timer
+U = [0;U;0];
+T = length(F);   
+plot(x,U, 'r'); hold on
+
+t = 0:.5:10;
+
+Y = exp(-((t-5).^2))- (exp(-25));
+
+plot(t,Y)
+title('Soln for x = 0.1')
+
+
